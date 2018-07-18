@@ -1,7 +1,7 @@
 ---
 # tasks file for password_policy
 # Set facts
-- name: set the name of password coplexity file for EL6
+- name: Set settings for EL6
   set_fact:
     password_complexity_file: '/etc/pam.d/system-auth' 
   when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "6"
