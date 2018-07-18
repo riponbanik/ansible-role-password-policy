@@ -1,0 +1,57 @@
+---
+- name: Enforce Password Complexity for EL7
+  lineinfile: 
+     backup: yes
+     state: present
+     dest: '{{ password_complexity_file }}'
+     regexp: '^{{ item.search }}'
+     line: '{{ item.replace }}'
+  with_items:
+      - { search: 'minlen', replace: 'minlen = {{ minlen }}' }
+      - { search: 'lcredit', replace: 'lcredit = {{ lcredit }}' }
+      - { search: 'ucredit', replace: 'ucredit = {{ ucredit }}' }
+      - { search: 'dcredit', replace: 'dcredit = {{ dcredit }}' }
+      - { search: 'ocredit', replace: 'ocredit = {{ ocredit }}' }
+  when: ansible_distribution == "RedHat" and ansible_distribution_major_version == "7"
+
+- name: Enforce Password Complexity for EL6
+  pamd:
+    name: 'system-auth'
+    type: password
+    control: requisite
+    module_path: pam_cracklib.so
+    module_arguments:
+     - 'minlen={{ minlen }}'
+     - 'dcredit={{ dcredit }}'
+     - 'ucredit={{ ucredit }}'
+     - 'lcredit={{ lcredit }}'
+     - 'ocredit={{ ocredit }}'     
+    state: args_present
+  when: ansible_distribution == "RedHat" and ansible_distribution_major_version == "6"  
+
+- name: Enforce Password Expiration
+  lineinfile: 
+     backup: yes
+     state: present
+     dest: '{{ password_expiration_file }}'
+     regexp: '^{{ item.search }}'
+     line: '{{ item.replace }}'
+  with_items:
+      - { search: 'PASS_MAX_DAYS', replace: 'PASS_MAX_DAYS  {{ PASS_MAX_DAYS }}' }
+      - { search: 'PASS_MIN_DAYS', replace: 'PASS_MIN_DAYS  {{ PASS_MIN_DAYS }}' }
+      - { search: 'PASS_MIN_LEN', replace: 'PASS_MIN_LEN  {{ PASS_MIN_LEN }}' }
+      - { search: 'PASS_WARN_AGE', replace: 'PASS_WARN_AGE  {{ PASS_WARN_AGE }}' }
+  when: (ansible_distribution == "RedHat" and ansible_distribution_major_version == "7") or
+        (ansible_distribution == "RedHat" and ansible_distribution_major_version == "6")
+
+- name: Enforce Password History
+  pamd:
+    name: 'system-auth'
+    type: password
+    control: sufficient 
+    module_path: pam_unix.so
+    module_arguments:
+     - 'remember={{ remember }}'
+    state: args_present    
+  when: (ansible_distribution == "RedHat" and ansible_distribution_major_version == "7") or
+        (ansible_distribution == "RedHat" and ansible_distribution_major_version == "6")   

@@ -1,0 +1,16 @@
+---
+# tasks file for password_policy
+
+# Include variables and define needed variables.
+- name: Include OS-specific variables.
+  include_vars: "{{ item }}"
+  with_first_found:
+   - "{{ ansible_distribution }}-{{ ansible_distribution_major_version}}.yml"
+   - "{{ ansible_distribution }}.yml"
+  
+- name: Include variables for Amazon Linux.
+  include_vars: "AmazonLinux.yml"
+  when: ansible_distribution == "Amazon" and ansible_distribution_major_version == "NA"
+
+# Setup/install tasks.
+- include_tasks: "Setup_{{ ansible_os_family }}.yml"

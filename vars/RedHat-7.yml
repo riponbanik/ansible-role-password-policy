@@ -1,0 +1,2 @@
+---
+password_complexity_file: /etc/security/pwquality.conf
