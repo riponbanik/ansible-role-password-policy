@@ -2,6 +2,7 @@
 # defaults file for password_policy
 password_expiration_file: /etc/login.defs
 password_history_file: /etc/pam.d/system-auth
+password_complexity_file: ''
 
 # password complexity
 minlen: 8
