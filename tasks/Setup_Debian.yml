@@ -36,8 +36,8 @@
 
 - name: Enforce Password History
   pamd:
-    name: 'system-auth'
-    type: common-password
+    name: 'common-password'
+    type: password
     control: '[success=2 default=ignore]'
     module_path: pam_unix.so
     module_arguments:
