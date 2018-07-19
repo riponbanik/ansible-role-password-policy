@@ -1,7 +1,7 @@
 ---
 # defaults file for password_policy
 password_expiration_file: /etc/login.defs
-password_history_file: /etc/pam.d/system-auth
+password_history_file: ''
 password_complexity_file: ''
 
 # password complexity
@@ -12,10 +12,10 @@ dcredit: -1
 ocredit: -1
 
 # password history
-remember: 12 
+remember: 12
 
 # password expiration
 PASS_MAX_DAYS: 60
 PASS_MIN_DAYS: 0
-PASS_MIN_LEN: 8 
+PASS_MIN_LEN: 8
 PASS_WARN_AGE: 7

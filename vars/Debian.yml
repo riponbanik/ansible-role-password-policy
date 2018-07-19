@@ -1,1 +1,3 @@
 ---
+password_complexity_file: /etc/pam.d/common-password
+password_history_file: /etc/pam.d/common-password

@@ -1,0 +1,45 @@
+---
+- name: Install the required packages
+  package:
+    name: {{ item }}
+    state: present
+  with_items:
+    - libpam-pwquality
+
+- name: Enforce Password Complexity
+  pamd:
+    name: 'common-password'
+    type: password
+    control: requisite
+    module_path:  pam_pwquality.so
+    module_arguments:
+     - 'minlen={{ minlen }}'
+     - 'dcredit={{ dcredit }}'
+     - 'ucredit={{ ucredit }}'
+     - 'lcredit={{ lcredit }}'
+     - 'ocredit={{ ocredit }}'
+    state: args_present
+
+- name: Enforce Password Expiration
+  lineinfile:
+     backup: yes
+     state: present
+     dest: '{{ password_expiration_file }}'
+     regexp: '^{{ item.search }}'
+     line: '{{ item.replace }}'
+  with_items:
+      - { search: 'PASS_MAX_DAYS', replace: 'PASS_MAX_DAYS  {{ PASS_MAX_DAYS }}' }
+      - { search: 'PASS_MIN_DAYS', replace: 'PASS_MIN_DAYS  {{ PASS_MIN_DAYS }}' }
+      - { search: 'PASS_MIN_LEN', replace: 'PASS_MIN_LEN  {{ PASS_MIN_LEN }}' }
+      - { search: 'PASS_WARN_AGE', replace: 'PASS_WARN_AGE  {{ PASS_WARN_AGE }}' }
+
+
+- name: Enforce Password History
+  pamd:
+    name: 'system-auth'
+    type: common-password
+    control: '[success=2 default=ignore]'
+    module_path: pam_unix.so
+    module_arguments:
+     - 'remember={{ remember }}'
+    state: args_present
