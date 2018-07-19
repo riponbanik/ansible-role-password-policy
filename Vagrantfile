@@ -41,11 +41,6 @@ Vagrant.configure("2") do |config|
        machine.ssh.insert_key = false
     	 machine.vm.provider "hyperv"
     	 machine.vm.network "public_network"
-       # config.vm.synced_folder ".", "/vagrant", disabled: true
-    	 machine.vm.synced_folder ".", "/vagrant", mount_options: ["vers=3.0"]
-       # Copy the Ansible playbook over to the guest machine, run rsync-auto to automatically
-       # pull in the latest changes while a VM is running.
-       # config.vm.synced_folder "../", "#{@ansible_home}/roles/", type: 'rsync'
 
        # Hyperv Provider
         machine.vm.provider "hyperv" do |h|
@@ -54,6 +49,10 @@ Vagrant.configure("2") do |config|
     	      h.maxmemory = 1024
     		  h.enable_virtualization_extensions = true
     		  h.differencing_disk = false
+          machine.vm.synced_folder ".", "/vagrant", mount_options: ["vers=3.0"]
+          # Copy the Ansible playbook over to the guest machine, run rsync-auto to automatically
+          # pull in the latest changes while a VM is running.
+          # config.vm.synced_folder "../", "#{@ansible_home}/roles/", type: 'rsync'
     	  end
 
         # Shell
@@ -69,6 +68,7 @@ Vagrant.configure("2") do |config|
            vb.cpus = 1
            vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
            vb.customize ["modifyvm", :id, "--ioapic", "on"]
+           machine.vm.synced_folder ".", "/vagrant"
         end
 
     	# Ansible
