@@ -1,7 +1,7 @@
 ---
 dependencies: []
 galaxy_info:
-  role_name: ansible-role-password-policy
+  role_name: password-policy
   author: ripoinbanik
   description: Password Policy Enforcement
   license: "license (BSD, MIT)"

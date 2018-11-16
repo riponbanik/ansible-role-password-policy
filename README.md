@@ -38,7 +38,7 @@ None.
       vars_files:
         - vars/main.yml
       roles:
-        - { role: riponbanik.password-policy }
+        - { role: riponbanik.password_policy }
 
 *Inside `vars/main.yml`*:
 
