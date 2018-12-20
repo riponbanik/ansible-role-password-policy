@@ -4,6 +4,7 @@ galaxy_info:
   role_name: password-policy
   author: ripoinbanik
   description: Password Policy Enforcement
+  company: Lyrics Pvt Ltd
   license: "license (BSD, MIT)"
   min_ansible_version: 2.4
   platforms:
