@@ -1,4 +1,19 @@
 ---
+- name: Enforce Password Complexity for EL8
+  lineinfile: 
+     backup: yes
+     state: present
+     dest: '{{ password_complexity_file }}'
+     regexp: '^{{ item.search }}'
+     line: '{{ item.replace }}'
+  with_items:
+      - { search: 'minlen', replace: 'minlen = {{ minlen }}' }
+      - { search: 'lcredit', replace: 'lcredit = {{ lcredit }}' }
+      - { search: 'ucredit', replace: 'ucredit = {{ ucredit }}' }
+      - { search: 'dcredit', replace: 'dcredit = {{ dcredit }}' }
+      - { search: 'ocredit', replace: 'ocredit = {{ ocredit }}' }
+  when: ansible_distribution_major_version == "8"
+
 - name: Enforce Password Complexity for EL7
   lineinfile: 
      backup: yes
